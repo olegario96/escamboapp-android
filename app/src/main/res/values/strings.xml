@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">escamboapp</string>
+    <string name="password">Senha</string>
+    <string name="email">Email</string>
+    <string name="signin">Entrar</string>
+    <string name="emptyEmail">E-mail não pode ficar em branco</string>
+    <string name="invalidEmail">E-mail inválido</string>
+    <string name="emptyPassword">Senha não pode ficar em branco</string>
+    <string name="shortPassword">Senha deve conter no mínimo 8 caracteres</string>
+    <string name="signInError">Usuário ou senha incorretos</string>
 </resources>

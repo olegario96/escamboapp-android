@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1037240342268",
+    "firebase_url": "https://escamboapp-9e3c8.firebaseio.com",
+    "project_id": "escamboapp-9e3c8",
+    "storage_bucket": "escamboapp-9e3c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037240342268:android:9d1006f30053820b",
+        "android_client_info": {
+          "package_name": "com.example.olegario.escamboapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037240342268-83bvitkiuk4fl62gbs6ur73t19t92t5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.olegario.escamboapp",
+            "certificate_hash": "0537281d2666d9e4a3527b32d27713c01f9341d5"
+          }
+        },
+        {
+          "client_id": "1037240342268-sh22rg6kujbi6hq32fjmi95rlkhggadl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChjzgVfs2weo0Fv6l7ILAy7MySdyMnioY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037240342268-sh22rg6kujbi6hq32fjmi95rlkhggadl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
