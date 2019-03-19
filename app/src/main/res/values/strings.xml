@@ -15,4 +15,9 @@
     <string name="confirmPassword">Confirmar senha</string>
     <string name="next">Próximo</string>
     <string name="invalidName">Primeiro nome não pode ficar em branco</string>
+    <string name="birthDate">Aniversário (DD/MM/AAAA)</string>
+    <string name="cpf">CPF (999.999.999-99)</string>
+    <string name="phone">Telefone (99) 99999-9999</string>
+    <string name="invalidCPF">CPF inválido</string>
+    <string name="invalidInfo">Dados inválidos. Revise seus dados</string>
 </resources>

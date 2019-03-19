@@ -1,6 +1,8 @@
 package com.example.olegario.escamboapp.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String passwordHash;
@@ -38,5 +40,12 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setAttributes(String firstName, String lastName, String email, String passwordHash) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.passwordHash = passwordHash;
     }
 }
