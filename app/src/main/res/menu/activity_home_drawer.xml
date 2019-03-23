@@ -5,11 +5,11 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/createAccountMenuButton"
             android:icon="@drawable/ic_create_account_grey_24dp"
             android:title="@string/createAccount" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/loginMenuButton"
             android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="@string/signIn" />
     </group>
