@@ -1,9 +1,9 @@
 package com.example.olegario.escamboapp.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -12,10 +12,10 @@ import android.widget.Toast;
 import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.helper.AuthHandler;
 import com.example.olegario.escamboapp.helper.DataValidator;
+import com.example.olegario.escamboapp.helper.Formatter;
 import com.example.olegario.escamboapp.model.User;
 import com.vicmikhailau.maskededittext.MaskedFormatter;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -36,6 +36,7 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
     private MaskedFormatter cpfFormatter = new MaskedFormatter("###.###.###-##");
     private MaskedFormatter birhFormatter = new MaskedFormatter("##/##/####");
 
+    private Formatter formatter = Formatter.getInstance();
     private DataValidator dataValidator = DataValidator.getInstance();
     private AuthHandler authHandler = AuthHandler.getInstance();
 
@@ -53,12 +54,18 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
         this.passwordEditText = findViewById(R.id.passwordCreateEditText);
         this.confirmPasswordEditText = findViewById(R.id.confirmPasswordCreateEditText);
 
+        if (getIntent().getStringExtra("user") != null) {
+            this.user = (User) getIntent().getExtras().getSerializable("user");
+            this.setFields();
+        }
+
         this.setDatePicker();
     }
 
     public void cancel(View view) {
         // TODO
     }
+
 
     public void next(View view) {
         String firstName = firstNameEditText.getText().toString();
@@ -72,7 +79,11 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
 
         final boolean dataIsValid = this.validateData(firstName, email, cpf, password, confirmPassword);
         if (dataIsValid) {
-            // TODO
+            this.user = new User();
+            this.user.setAttributes(firstName, lastName, email, cpf, phone, birthdate, password);
+            Intent intent = new Intent(getApplicationContext(), SelectProfilePhotoActivity.class);
+            intent.putExtra("user", this.user);
+            startActivity(intent);
         }
     }
 
@@ -80,6 +91,12 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
         this.firstNameEditText.setText(this.user.getFirstName());
         this.lastNameEdiText.setText(this.user.getLastName());
         this.emailEditText.setText(this.user.getEmail());
+        final String phoneMasked = this.formatter.formatPhone(this.user.getPhone());
+        this.phoneEditText.setText(phoneMasked);
+        final String birthDateMasked = this.formatter.formatBirthDate(this.user.getBirthdate());
+        this.birthdateEditText.setText(birthDateMasked);
+        final String cpfMasked = this.formatter.formatCPF(this.user.getCPF());
+        this.cpfEditText.setText(cpfMasked);
     }
 
     private void setDatePicker() {

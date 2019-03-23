@@ -5,8 +5,11 @@ import java.io.Serializable;
 public class User implements Serializable {
     private String firstName;
     private String lastName;
-    private String passwordHash;
     private String email;
+    private String cpf;
+    private String phone;
+    private String birthdate;
+    private String passwordHash;
 
     public User() {}
 
@@ -42,10 +45,37 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public void setAttributes(String firstName, String lastName, String email, String passwordHash) {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getCPF() {
+        return this.cpf;
+    }
+
+    public void setCPF(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setAttributes(String firstName, String lastName, String email, String cpf, String phone, String birthdate, String passwordHash) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.cpf = cpf;
+        this.phone = phone;
+        this.birthdate = birthdate;
         this.passwordHash = passwordHash;
     }
 }

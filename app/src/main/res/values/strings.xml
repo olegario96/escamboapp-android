@@ -20,4 +20,8 @@
     <string name="phone">Telefone (99) 99999-9999</string>
     <string name="invalidCPF">CPF inválido</string>
     <string name="invalidInfo">Dados inválidos. Revise seus dados</string>
+    <string name="selectProfilePhoto">Escolha uma foto de perfil</string>
+    <string name="finish">Finalizar</string>
+    <string name="photoNotPicked">Você não escolheu nenhuma foto</string>
+    <string name="photoNotExists">A foto escolhida não está disponível no seu dispositivo</string>
 </resources>
