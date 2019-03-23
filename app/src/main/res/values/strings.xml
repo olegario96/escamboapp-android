@@ -31,4 +31,13 @@
     <string name="titleInvalid">Título do anúncio não pode ficar em branco</string>
     <string name="priceInvalid">Preço não pode ficar em branco e deve seguir o formato ###,##</string>
     <string name="descriptionInvalid">Descrição não pode ficar em branco.</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="appName">EscamboApp</string>
+    <string name="devEmail">gustavo-olegario@hotmail.com</string>
+    <string name="searchHint">Digite um nome de produto</string>
 </resources>
