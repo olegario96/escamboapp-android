@@ -85,4 +85,46 @@ public final class DataValidator {
             return(false);
         }
     }
+
+    public boolean validateTitleForAd(String title) {
+        return !this.isEmptyString(title);
+    }
+
+    public boolean validatePrice(String price) {
+        if (!this.isEmptyString(price)) {
+            final int numCommas = this.countChar(price, ',');
+            if (numCommas == 0 || numCommas == 1) {
+                final String priceFormatted = price.replace(',', '.');
+                try {
+                    Double.parseDouble(priceFormatted);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validateDescription(String description) {
+        return !this.isEmptyString(description);
+    }
+
+    private boolean isEmptyString(String s) {
+        return s.length() == 0;
+    }
+
+    private int countChar(String str, char c) {
+        int count = 0;
+        for (int i = 0; i < str.length(); ++i) {
+            if (str.charAt(i) == c) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
 }

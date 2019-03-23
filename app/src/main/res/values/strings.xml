@@ -24,4 +24,11 @@
     <string name="finish">Finalizar</string>
     <string name="photoNotPicked">Você não escolheu nenhuma foto</string>
     <string name="photoNotExists">A foto escolhida não está disponível no seu dispositivo</string>
+    <string name="createAd">Criar anúncio</string>
+    <string name="adTitle">Nome do anúncio</string>
+    <string name="productPrice">Preço do produto (R$ ##,##)</string>
+    <string name="description">Descrição</string>
+    <string name="titleInvalid">Título do anúncio não pode ficar em branco</string>
+    <string name="priceInvalid">Preço não pode ficar em branco e deve seguir o formato ###,##</string>
+    <string name="descriptionInvalid">Descrição não pode ficar em branco.</string>
 </resources>

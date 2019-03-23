@@ -43,7 +43,7 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_user);
+        setContentView(R.layout.activity_create_user_basic_info);
 
         this.firstNameEditText = findViewById(R.id.firstNameCreateEditText);
         this.lastNameEdiText = findViewById(R.id.lastNameCreateEditText);
@@ -133,9 +133,10 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
         final boolean cpfIsValid = this.dataValidator.validateCPF(cpf);
         final boolean passwordIsValid = this.dataValidator.validatePassword(password);
         final boolean passwordsAreEquals = this.dataValidator.comparePasswords(password, confirmPassowrd);
-        boolean result = false;
+        boolean result = true;
 
         if (!nameIsValid) {
+            result = false;
             final String errMsg = getString(R.string.invalidName);
             this.firstNameEditText.setError(errMsg);
             Toast.makeText(getApplicationContext(), getString(R.string.invalidInfo), Toast.LENGTH_LONG).show();
@@ -143,27 +144,29 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
 
 
         if (!emailIsValid) {
+            result = false;
             final String errMsg = getString(R.string.invalidEmail);
             this.emailEditText.setError(errMsg);
         }
 
 
         if (!passwordIsValid) {
+            result = false;
             final String errMsg = getString(R.string.shortPassword);
             this.passwordEditText.setError(errMsg);
         }
 
         if (!passwordsAreEquals) {
+            result = false;
             final String errMsg = getString(R.string.differentPassword);
             this.passwordEditText.setError(errMsg);
             this.confirmPasswordEditText.setError(errMsg);
         }
 
         if (!cpfIsValid) {
+            result = false;
             final String errMsg = getString(R.string.invalidCPF);
             this.cpfEditText.setError(errMsg);
-        } else {
-            result = true;
         }
 
         if (!result) {
