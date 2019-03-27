@@ -4,13 +4,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.olegario.escamboapp.R;
-import com.example.olegario.escamboapp.helper.AuthHandler;
+import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
 import com.example.olegario.escamboapp.helper.DataValidator;
 import com.example.olegario.escamboapp.helper.Formatter;
 import com.example.olegario.escamboapp.model.User;
@@ -38,7 +39,7 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
 
     private Formatter formatter = Formatter.getInstance();
     private DataValidator dataValidator = DataValidator.getInstance();
-    private AuthHandler authHandler = AuthHandler.getInstance();
+    private FirebaseAuthHandler firebaseAuthHandler = FirebaseAuthHandler.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
         this.passwordEditText = findViewById(R.id.passwordCreateEditText);
         this.confirmPasswordEditText = findViewById(R.id.confirmPasswordCreateEditText);
 
-        if (getIntent().getStringExtra("user") != null) {
+        if (getIntent().getSerializableExtra("user") != null) {
             this.user = (User) getIntent().getExtras().getSerializable("user");
             this.setFields();
         }
@@ -63,7 +64,12 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
     }
 
     public void cancel(View view) {
-        // TODO
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.cancel(null);
     }
 
 
@@ -80,7 +86,8 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
         final boolean dataIsValid = this.validateData(firstName, email, cpf, password, confirmPassword);
         if (dataIsValid) {
             this.user = new User();
-            this.user.setAttributes(firstName, lastName, email, cpf, phone, birthdate, password);
+            final String passwordHash = firebaseAuthHandler.encryptPassword(password);
+            this.user.setAttributes(firstName, lastName, email, cpf, phone, birthdate, passwordHash);
             Intent intent = new Intent(getApplicationContext(), SelectProfilePhotoActivity.class);
             intent.putExtra("user", this.user);
             startActivity(intent);

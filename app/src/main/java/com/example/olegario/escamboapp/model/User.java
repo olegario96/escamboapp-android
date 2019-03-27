@@ -69,6 +69,13 @@ public class User implements Serializable {
         this.cpf = cpf;
     }
 
+    public String toString() {
+        return "{firstName: " + this.firstName + "\n" +
+               "lastName: " + this.lastName + "\n" +
+               "cpf:" + this.cpf + "\n" +
+               "email:" + this.email + "\n" + "}";
+    }
+
     public void setAttributes(String firstName, String lastName, String email, String cpf, String phone, String birthdate, String passwordHash) {
         this.firstName = firstName;
         this.lastName = lastName;

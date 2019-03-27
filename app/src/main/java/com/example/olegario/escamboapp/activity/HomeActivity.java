@@ -23,16 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.olegario.escamboapp.R;
-import com.example.olegario.escamboapp.fragment.CreateAccountFragment;
-import com.example.olegario.escamboapp.fragment.LoginFragment;
-
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private LoginFragment loginFragment;
-    private CreateAccountFragment accountFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +46,6 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        this.loginFragment = new LoginFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.homeFrameLayout, this.loginFragment);
-        transaction.commit();
     }
 
     @Override
@@ -82,17 +72,16 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Fragment visible = this.getVisibleFragment();
-        if (!(visible instanceof LoginFragment)) {
-            getMenuInflater().inflate(R.menu.options_menu, menu);
-            SearchView searchView =
-                    (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
-            SearchManager searchManager =
-                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            searchView.setSearchableInfo(
-                    searchManager.getSearchableInfo(getComponentName())
-            );
-        }
+
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        SearchView searchView =
+                (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName())
+        );
+
         return true;
     }
 
@@ -125,15 +114,11 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.createAccountMenuButton) {
-            this.accountFragment = new CreateAccountFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.homeFrameLayout, this.accountFragment);
-            transaction.commit();
+            Intent intent = new Intent(getApplicationContext(), CreateUserBasicInfoActivity.class);
+            startActivity(intent);
         } else if (id == R.id.loginMenuButton) {
-            this.loginFragment = new LoginFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.homeFrameLayout, this.loginFragment);
-            transaction.commit();
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

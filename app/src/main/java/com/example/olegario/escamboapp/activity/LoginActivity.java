@@ -2,14 +2,13 @@ package com.example.olegario.escamboapp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.olegario.escamboapp.R;
-import com.example.olegario.escamboapp.helper.AuthHandler;
+import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
 import com.example.olegario.escamboapp.helper.DataValidator;
 
 public class LoginActivity extends AppCompatActivity {
@@ -17,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button signInButton;
-    private AuthHandler authHandler = AuthHandler.getInstance();
+    private FirebaseAuthHandler firebaseAuthHandler = FirebaseAuthHandler.getInstance();
     private DataValidator dataValidator = DataValidator.getInstance();
 
     @Override
@@ -34,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         if (this.validateData(email, password)) {
-            boolean authenticated = authHandler.authenticateUser(email, password);
+            boolean authenticated = firebaseAuthHandler.authenticateUser(email, password);
             if (authenticated) {
                 // TODO
             } else {

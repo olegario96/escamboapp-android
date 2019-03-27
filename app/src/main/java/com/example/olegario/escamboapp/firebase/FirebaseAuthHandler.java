@@ -1,4 +1,4 @@
-package com.example.olegario.escamboapp.helper;
+package com.example.olegario.escamboapp.firebase;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -7,12 +7,12 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public final class AuthHandler {
+public final class FirebaseAuthHandler {
 
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private static final AuthHandler INSTANCE = new AuthHandler();
+    private static final FirebaseAuthHandler INSTANCE = new FirebaseAuthHandler();
 
-    public AuthHandler() {}
+    public FirebaseAuthHandler() {}
 
     public boolean createUser(String email, String password) {
         Task authenticated = auth.createUserWithEmailAndPassword(email, password);
@@ -32,7 +32,7 @@ public final class AuthHandler {
         return (auth.getCurrentUser() != null);
     }
 
-    public static AuthHandler getInstance() {
+    public static FirebaseAuthHandler getInstance() {
         return INSTANCE;
     }
 
