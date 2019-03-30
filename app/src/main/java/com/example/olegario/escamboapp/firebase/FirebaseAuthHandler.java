@@ -1,6 +1,11 @@
 package com.example.olegario.escamboapp.firebase;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.UnsupportedEncodingException;
@@ -14,14 +19,14 @@ public final class FirebaseAuthHandler {
 
     public FirebaseAuthHandler() {}
 
-    public boolean createUser(String email, String password) {
+    public Task createUser(String email, String password) {
         Task authenticated = auth.createUserWithEmailAndPassword(email, password);
-        return authenticated.isSuccessful();
+        return authenticated;
     }
 
-    public boolean authenticateUser(String email, String password) {
-        Task authenticated = auth.signInWithEmailAndPassword(email, password);
-        return authenticated.isSuccessful();
+    public Task authenticateUser(String email, String password) {
+        String passwordHash = this.encryptPassword(password);
+        return auth.signInWithEmailAndPassword(email, passwordHash);
     }
 
     public void logoutUser() {
@@ -38,10 +43,14 @@ public final class FirebaseAuthHandler {
 
     public String encryptPassword(String password) {
         try {
-            byte[] passwordInBytes = password.getBytes("UTF-8");
             MessageDigest md5 = MessageDigest.getInstance("MD5");
-            byte[] passwordInBytesEncrypted = md5.digest(passwordInBytes);
-            return new String(passwordInBytesEncrypted);
+            byte[] hash = md5.digest(password.getBytes("UTF-8"));
+
+            StringBuilder sb = new StringBuilder(2*hash.length);
+            for (byte b: hash) {
+                sb.append(String.format("%02x", b&0xff));
+            }
+            return sb.toString();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {

@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,10 @@ import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
 import com.example.olegario.escamboapp.firebase.FirebaseDatabaseHandler;
 import com.example.olegario.escamboapp.firebase.FirebaseStorageHandler;
+import com.example.olegario.escamboapp.helper.Database;
 import com.example.olegario.escamboapp.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -36,12 +40,12 @@ public class SelectProfilePhotoActivity extends AppCompatActivity {
     private int RESULT_LOAD_IMAGE = 1;
     private final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private ImageButton profileImageButton;
-    private Button finishButton;
     private User user;
     private Uri filePath;
     private FirebaseAuthHandler authHandler = FirebaseAuthHandler.getInstance();
     private FirebaseStorageHandler storageHandler = FirebaseStorageHandler.getInstance();
     private FirebaseDatabaseHandler databaseHandler = FirebaseDatabaseHandler.getInstance();
+    private Database db = new Database(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,6 @@ public class SelectProfilePhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_profile_photo);
 
         profileImageButton = findViewById(R.id.selectProfileImageButton);
-        finishButton = findViewById(R.id.finishCreateProfileButton);
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,20 +110,37 @@ public class SelectProfilePhotoActivity extends AppCompatActivity {
     }
 
     public void finishButtonClicked(View view) {
-//        final ProgressDialog progressDialog = new ProgressDialog(this);
-//        progressDialog.setTitle(getString(R.string.creatingUser));
-//        progressDialog.show();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(getString(R.string.creatingUser));
+        progressDialog.show();
 
-        String userId = databaseHandler.saveUser(this.user);
-        String filePath = this.getRealPathFromUri(this.filePath);
-        if (this.filePath != null) storageHandler.saveUserImage(userId, filePath);
-//        authHandler.createUser(this.user.getEmail(), this.user.getPasswordHash());
-        finish();
+        final String userId = databaseHandler.saveUser(this.user);
+        if (this.filePath != null) {
+            String filePath = this.getRealPathFromUri(this.filePath);
+            storageHandler.saveUserImage(userId, filePath);
+        }
 
+        authHandler.createUser(this.user.getEmail(), this.user.getPasswordHash())
+                .addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Intent data = new Intent();
+                            data.putExtra("userId", userId);
+                            db.addUser(userId, user.getEmail());
+                            setResult(RESULT_OK, data);
+                            finish();
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
     }
 
     @Override
     public boolean onSupportNavigateUp() {
+        Intent data = new Intent();
+        data.putExtra("userId", "");
+        setResult(RESULT_CANCELED, data);
         finish();
         return true;
     }

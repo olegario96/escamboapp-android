@@ -22,6 +22,8 @@ import java.util.Calendar;
 
 public class CreateUserBasicInfoActivity extends AppCompatActivity {
 
+    private final int REQUEST_CODE = 1;
+
     private final Calendar calendar = Calendar.getInstance();
     private User user;
     private EditText firstNameEditText;
@@ -90,7 +92,17 @@ public class CreateUserBasicInfoActivity extends AppCompatActivity {
             this.user.setAttributes(firstName, lastName, email, cpf, phone, birthdate, passwordHash);
             Intent intent = new Intent(getApplicationContext(), SelectProfilePhotoActivity.class);
             intent.putExtra("user", this.user);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String userId = data.getExtras().getString("userId");
+            data.putExtra("userId", userId);
+            setResult(RESULT_OK, data);
+            finish();
         }
     }
 

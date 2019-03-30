@@ -1,7 +1,11 @@
 package com.example.olegario.escamboapp.activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +14,8 @@ import android.widget.Toast;
 import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
 import com.example.olegario.escamboapp.helper.DataValidator;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,13 +39,24 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         if (this.validateData(email, password)) {
-            boolean authenticated = firebaseAuthHandler.authenticateUser(email, password);
-            if (authenticated) {
-                // TODO
-            } else {
-                final String errMsg = getString(R.string.signInError);
-                Toast.makeText(getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
-            }
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle(getString(R.string.authenticating));
+            progressDialog.show();
+
+            firebaseAuthHandler.authenticateUser(email, password)
+                .addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            final String errMsg = getString(R.string.signInError);
+                            Toast.makeText(getApplicationContext(), errMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
         }
     }
 
