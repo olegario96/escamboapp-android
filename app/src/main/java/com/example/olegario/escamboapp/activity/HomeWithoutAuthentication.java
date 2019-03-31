@@ -4,8 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.support.design.widget.NavigationView;
@@ -14,15 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
-import com.example.olegario.escamboapp.firebase.FirebaseDatabaseHandler;
-
-import java.util.List;
 
 public class HomeWithoutAuthentication extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +44,7 @@ public class HomeWithoutAuthentication extends AppCompatActivity
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.navViewWithAuthentication);
             navigationView.setNavigationItemSelectedListener(this);
         }
     }

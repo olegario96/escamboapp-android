@@ -45,7 +45,6 @@ public class SelectProfilePhotoActivity extends AppCompatActivity {
     private FirebaseAuthHandler authHandler = FirebaseAuthHandler.getInstance();
     private FirebaseStorageHandler storageHandler = FirebaseStorageHandler.getInstance();
     private FirebaseDatabaseHandler databaseHandler = FirebaseDatabaseHandler.getInstance();
-    private Database db = new Database(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +126,6 @@ public class SelectProfilePhotoActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Intent data = new Intent();
                             data.putExtra("userId", userId);
-                            db.addUser(userId, user.getEmail());
                             setResult(RESULT_OK, data);
                             finish();
                         }

@@ -53,4 +53,10 @@
     <string name="action_settings">Settings</string>
     <string name="signOut">Sair</string>
     <string name="authenticating">Autenticando usuário...</string>
+    <string name="welcomeUser">Bem-vindo,</string>
+    <string name="myProfile">Meu perfil</string>
+    <string name="myAds">Meus anúncios</string>
+    <string name="searchByCategory">Pesquisar por categoria</string>
+    <string name="cantLoadImage">Não foi possível carregar a(s) imagem(ns)</string>
+    <string name="editUser">Editar usuário</string>
 </resources>

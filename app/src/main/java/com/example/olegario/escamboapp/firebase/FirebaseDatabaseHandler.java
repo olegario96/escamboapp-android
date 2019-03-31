@@ -5,6 +5,7 @@ import com.example.olegario.escamboapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.List;
 
@@ -20,9 +21,8 @@ public final class FirebaseDatabaseHandler {
         return userId;
     }
 
-    public User getUserByEmail(String email) {
-        reference.getReference().child("users").child("email").equals(email);
-        return null;
+    public Query getUserByEmail(String email) {
+        return reference.getReference().child("users").orderByChild("email").equalTo(email);
     }
 
     public boolean saveAd(Ad ad) {

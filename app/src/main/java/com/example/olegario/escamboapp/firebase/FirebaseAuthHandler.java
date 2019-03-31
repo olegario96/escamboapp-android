@@ -29,6 +29,10 @@ public final class FirebaseAuthHandler {
         return auth.signInWithEmailAndPassword(email, passwordHash);
     }
 
+    public String getEmailFromCurrentUser() {
+        return auth.getCurrentUser().getEmail();
+    }
+
     public void logoutUser() {
         auth.signOut();
     }

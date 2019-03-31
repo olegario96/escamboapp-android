@@ -76,6 +76,10 @@ public class User implements Serializable {
                "email:" + this.email + "\n" + "}";
     }
 
+    public String buildFullName() {
+        return this.firstName + " " + this.lastName;
+    }
+
     public void setAttributes(String firstName, String lastName, String email, String cpf, String phone, String birthdate, String passwordHash) {
         this.firstName = firstName;
         this.lastName = lastName;

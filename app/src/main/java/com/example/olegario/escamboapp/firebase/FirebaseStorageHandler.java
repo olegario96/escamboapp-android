@@ -32,23 +32,11 @@ public final class FirebaseStorageHandler {
         Uri uri = Uri.fromFile(new File(filePath));
         UploadTask uploadTask = ref.putFile(uri);
 
-//        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-//            @Override
-//            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-//                if (!task.isSuccessful()) {
-//                    throw task.getException();
-//                }
-//
-//                return ref.getDownloadUrl();
-//            }
-//        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Uri> task) {
-//                if (task.isSuccessful()) {
-//                    Uri downloadUri = task.getResult();
-//                }
-//            }
-//        });
         return true;
+    }
+
+    public Task<Uri> getUserImage(String userId) {
+        final StorageReference ref = storageReference.child("users/" + userId);
+        return ref.getDownloadUrl();
     }
 }
