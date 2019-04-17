@@ -4,7 +4,7 @@ import android.util.Patterns;
 
 import java.util.InputMismatchException;
 
-public final class DataValidator {
+public class DataValidator {
 
     private static final DataValidator INSTANCE = new DataValidator();
 

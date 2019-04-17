@@ -73,7 +73,7 @@ public class HomeWithAuthentication extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_with_authentication);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarWithAuthentication);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

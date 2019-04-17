@@ -23,7 +23,7 @@ public class HomeWithoutAuthentication extends AppCompatActivity
 
     private final int REQUEST_CODE_CREATE_ACCOUNT = 1;
     private final int REQUEST_CODE_LOGIN = 2;
-    private final int REQUEST_CODE__HOME_WITH_LOGIN = 3;
+    private final int REQUEST_CODE_HOME_WITH_LOGIN = 3;
     private FirebaseAuthHandler authHandler = FirebaseAuthHandler.getInstance();
 
     @Override
@@ -38,13 +38,13 @@ public class HomeWithoutAuthentication extends AppCompatActivity
 
             handleIntent(getIntent());
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_without_authentication);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigationDrawerOpen, R.string.navigationDrawerClose);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
-            NavigationView navigationView = (NavigationView) findViewById(R.id.navViewWithAuthentication);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.navViewWithouAuthentication);
             navigationView.setNavigationItemSelectedListener(this);
         }
     }
@@ -110,7 +110,7 @@ public class HomeWithoutAuthentication extends AppCompatActivity
             startActivityForResult(intent, REQUEST_CODE_LOGIN);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_without_authentication);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -126,14 +126,17 @@ public class HomeWithoutAuthentication extends AppCompatActivity
                 case REQUEST_CODE_LOGIN:
                     this.startHomeActivityWithAuthentication();
                     break;
-                case REQUEST_CODE__HOME_WITH_LOGIN:
+                case REQUEST_CODE_HOME_WITH_LOGIN:
                     finish();
+                    break;
             }
+        } else if (resultCode == RESULT_CANCELED) {
+            return;
         }
     }
 
     private void startHomeActivityWithAuthentication() {
         Intent intent = new Intent(getApplicationContext(), HomeWithAuthentication.class);
-        startActivityForResult(intent, REQUEST_CODE__HOME_WITH_LOGIN);
+        startActivityForResult(intent, REQUEST_CODE_HOME_WITH_LOGIN);
     }
 }
