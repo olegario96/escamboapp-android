@@ -50,7 +50,7 @@ public class LoginActivityTests {
 
         onView(withId(R.id.signInButton)).perform(click());
         try {
-            Thread.sleep(5500);
+            Thread.sleep(6000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -71,14 +71,14 @@ public class LoginActivityTests {
 
         onView(withText(logout)).perform(click());
 
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        onView(withText(appName))
-//                .check(ViewAssertions.matches(withParent(withId(R.id.toolbar))));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withText(appName))
+                .check(ViewAssertions.matches(withParent(withId(R.id.toolbar))));
     }
 
     private String getResourceString(int id) {

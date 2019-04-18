@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,21 +33,25 @@ public class HomeWithoutAuthentication extends AppCompatActivity
         if (authHandler.isUserAuthenticated()) {
             this.startHomeActivityWithAuthentication();
         } else {
-            setContentView(R.layout.activity_home_without_authentication);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            handleIntent(getIntent());
-
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_without_authentication);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigationDrawerOpen, R.string.navigationDrawerClose);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-
-            NavigationView navigationView = (NavigationView) findViewById(R.id.navViewWithouAuthentication);
-            navigationView.setNavigationItemSelectedListener(this);
+            this.setupView();
         }
+    }
+
+    protected  void setupView() {
+        setContentView(R.layout.activity_home_without_authentication);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        handleIntent(getIntent());
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_without_authentication);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigationDrawerOpen, R.string.navigationDrawerClose);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navViewWithouAuthentication);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -129,14 +134,18 @@ public class HomeWithoutAuthentication extends AppCompatActivity
                 case REQUEST_CODE_HOME_WITH_LOGIN:
                     finish();
                     break;
+                default:
+                    break;
             }
         } else if (resultCode == RESULT_CANCELED) {
+            setupView();
             return;
         }
     }
 
     private void startHomeActivityWithAuthentication() {
         Intent intent = new Intent(getApplicationContext(), HomeWithAuthentication.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(intent, REQUEST_CODE_HOME_WITH_LOGIN);
     }
 }
