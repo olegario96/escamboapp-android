@@ -64,5 +64,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:rules:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+
+    // Framework
+    implementation project(':capuccino')
 }
 apply plugin: 'com.google.gms.google-services'

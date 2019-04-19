@@ -1,5 +1,6 @@
 package com.example.olegario.escamboapp.activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewParent;
 
 import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
@@ -25,11 +27,12 @@ public class HomeWithoutAuthentication extends AppCompatActivity
     private final int REQUEST_CODE_CREATE_ACCOUNT = 1;
     private final int REQUEST_CODE_LOGIN = 2;
     private final int REQUEST_CODE_HOME_WITH_LOGIN = 3;
-    private FirebaseAuthHandler authHandler = FirebaseAuthHandler.getInstance();
+    private FirebaseAuthHandler authHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.authHandler = FirebaseAuthHandler.getInstance();
         if (authHandler.isUserAuthenticated()) {
             this.startHomeActivityWithAuthentication();
         } else {
@@ -68,10 +71,11 @@ public class HomeWithoutAuthentication extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_without_authentication);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            setResult(RESULT_OK);
             super.onBackPressed();
         }
     }
@@ -138,7 +142,7 @@ public class HomeWithoutAuthentication extends AppCompatActivity
                     break;
             }
         } else if (resultCode == RESULT_CANCELED) {
-            setupView();
+//            setupView();
             return;
         }
     }
