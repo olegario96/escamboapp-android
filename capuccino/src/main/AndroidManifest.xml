@@ -3,7 +3,8 @@
     package="com.getmore.olegario.capuccino">
 
     <application>
-        <activity android:name=".LauncherAppActivity"></activity>
+        <activity android:name=".activity.LauncherAppActivity" />
+        <activity android:name=".activity.CapuccinoBaseActivity"></activity>
     </application>
 
 </manifest>

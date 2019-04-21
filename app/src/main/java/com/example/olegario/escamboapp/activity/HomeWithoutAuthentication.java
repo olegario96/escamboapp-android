@@ -16,12 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
+import com.getmore.olegario.capuccino.activity.CapuccinoBaseActivity;
 
-public class HomeWithoutAuthentication extends AppCompatActivity
+public class HomeWithoutAuthentication extends CapuccinoBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final int REQUEST_CODE_CREATE_ACCOUNT = 1;

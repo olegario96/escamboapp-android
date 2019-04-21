@@ -59,7 +59,7 @@
             android:name=".activity.LoginActivity"
             android:label="@string/signIn" />
         <activity
-            android:name="com.getmore.olegario.capuccino.LauncherAppActivity"
+            android:name="com.getmore.olegario.capuccino.activity.LauncherAppActivity"
             android:label="library" />
     </application>
 

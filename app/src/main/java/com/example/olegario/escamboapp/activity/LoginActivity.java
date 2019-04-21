@@ -14,10 +14,11 @@ import android.widget.Toast;
 import com.example.olegario.escamboapp.R;
 import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
 import com.example.olegario.escamboapp.helper.DataValidator;
+import com.getmore.olegario.capuccino.activity.CapuccinoBaseActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends CapuccinoBaseActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
