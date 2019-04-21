@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">capuccino</string>
+    <string name="activity_package_exception_message">Package or Classname not set!</string>
+    <string name="expected_assertion_exception_message">Expected assertion not set!</string>
+    <string name="test_file_name_exception_message">Test file name not set!</string>
 </resources>
