@@ -1,5 +1,9 @@
 package com.getmore.olegario.capuccino.model;
 
+import android.content.Context;
+
+import com.getmore.olegario.capuccino.exception.TextEventBeforeClickEventException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +20,11 @@ public final class CapuccinoEventLogger {
     }
 
     public void addNewCapuccinoEvent(CapuccinoEvent ce) {
+        if (ce instanceof CapuccinoKeyboardEvent && capuccinoEvents.size() == 0) {
+            final String errMsg = "Impossible to perform a keyboard event before a click event";
+            throw new TextEventBeforeClickEventException(errMsg);
+        }
+
         if (ce instanceof CapuccinoKeyboardEvent) {
             final CapuccinoEvent lastEvent = this.capuccinoEvents.get(capuccinoEvents.size() - 1);
             if (lastEvent instanceof  CapuccinoKeyboardEvent) {
