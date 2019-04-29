@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.getmore.olegario.capuccino.R;
 import com.getmore.olegario.capuccino.exception.ActivityPackageException;
@@ -14,7 +15,7 @@ import com.getmore.olegario.capuccino.model.CapuccinoTestConfiguration;
 import com.getmore.olegario.capuccino.model.CapuccinoTestWriter;
 
 public class LauncherAppActivity extends AppCompatActivity {
-    private CapuccinoTestConfiguration capuccinoTestConfiguration;
+    private final CapuccinoTestConfiguration capuccinoTestConfiguration = new CapuccinoTestConfiguration();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +66,9 @@ public class LauncherAppActivity extends AppCompatActivity {
     }
 
     @Override
-    public void finish() {
+    public void onDestroy() {
         CapuccinoEventLogger capuccinoEventLogger = CapuccinoEventLogger.getInstance();
         CapuccinoTestWriter.writeTest(this.capuccinoTestConfiguration, capuccinoEventLogger);
-        super.finish();
+        super.onDestroy();
     }
 }

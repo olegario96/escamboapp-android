@@ -2,7 +2,7 @@ package com.getmore.olegario.capuccino.model;
 
 import java.util.Date;
 
-public class CapuccinoEvent {
+public abstract class CapuccinoEvent {
     private Date timestamp;
 
     public CapuccinoEvent() {
@@ -16,4 +16,6 @@ public class CapuccinoEvent {
     public Date getTimestamp() {
         return timestamp;
     }
+
+    public abstract void print();
 }

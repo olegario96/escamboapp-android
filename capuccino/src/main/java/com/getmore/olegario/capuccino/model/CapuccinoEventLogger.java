@@ -1,6 +1,6 @@
 package com.getmore.olegario.capuccino.model;
 
-import android.content.Context;
+import android.util.Log;
 
 import com.getmore.olegario.capuccino.exception.TextEventBeforeClickEventException;
 
@@ -26,19 +26,47 @@ public final class CapuccinoEventLogger {
         }
 
         if (ce instanceof CapuccinoKeyboardEvent) {
-            final CapuccinoEvent lastEvent = this.capuccinoEvents.get(capuccinoEvents.size() - 1);
-            if (lastEvent instanceof  CapuccinoKeyboardEvent) {
-                final char character = ((CapuccinoKeyboardEvent) ce).getLastCharacter();
-                ((CapuccinoKeyboardEvent) lastEvent).concatenate(character);
-            } else {
-                this.capuccinoEvents.add(ce);
-            }
+            this.addCapuccinoKeyboardEvent((CapuccinoKeyboardEvent) ce);
         } else {
             this.capuccinoEvents.add(ce);
         }
     }
 
+    public void addCapuccinoKeyboardEvent(CapuccinoKeyboardEvent ce) {
+        final CapuccinoEvent lastEvent = this.capuccinoEvents.get(capuccinoEvents.size() - 1);
+        if (lastEvent instanceof CapuccinoKeyboardEvent &&
+            !((CapuccinoKeyboardEvent) lastEvent).isFinal()) {
+
+            final char character = ((CapuccinoKeyboardEvent) ce).getLastCharacter();
+            ((CapuccinoKeyboardEvent) lastEvent).concatenate(character);
+        } else {
+            this.capuccinoEvents.add(ce);
+        }
+    }
+
+    public void markLastCapuccinoEventFinal() {
+        CapuccinoEvent ce = this.getLastCapuccinoEvent();
+        if (ce instanceof CapuccinoKeyboardEvent)
+            ((CapuccinoKeyboardEvent) ce).setFinal(true);
+    }
+
+    public void removeLastCharacter() {
+        CapuccinoEvent ce = this.getLastCapuccinoEvent();
+        if (ce instanceof CapuccinoKeyboardEvent)
+            ((CapuccinoKeyboardEvent) ce).removeLastCharacter();
+    }
+
     public List<CapuccinoEvent> getCapuccinoEvents() {
         return capuccinoEvents;
+    }
+
+    public CapuccinoEvent getLastCapuccinoEvent() {
+        return this.capuccinoEvents.get(this.capuccinoEvents.size() - 1);
+    }
+
+    public void print() {
+        for (CapuccinoEvent capuccinoEvent: this.capuccinoEvents) {
+            capuccinoEvent.print();
+        }
     }
 }

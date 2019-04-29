@@ -10,8 +10,12 @@ public class TestActivity extends LauncherAppActivity {
     protected void onCreate(Bundle savedInstanceState) {
         final String packageName = "com.example.olegario.escamboapp";
         final String className = packageName + ".activity.HomeWithoutAuthentication";
+        final String testFileName = "CapuccinoTest";
+        final String expectedAssertion = "me mama otario";
         this.setPackageName(packageName);
         this.setClassName(className);
+        this.setTestFileName(testFileName);
+        this.setExpectedAssertion(expectedAssertion);
 
         super.onCreate(savedInstanceState);
     }

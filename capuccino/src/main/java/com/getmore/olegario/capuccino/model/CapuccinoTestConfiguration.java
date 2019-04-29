@@ -13,6 +13,8 @@ public class CapuccinoTestConfiguration {
         this.expectedAssertion = expectedAssertion;
     }
 
+    public CapuccinoTestConfiguration() {}
+
     public String getPackageName() {
         return packageName;
     }
