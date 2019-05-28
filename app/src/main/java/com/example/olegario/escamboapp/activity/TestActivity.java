@@ -11,12 +11,11 @@ public class TestActivity extends LauncherAppActivity {
         final String packageName = "com.example.olegario.escamboapp";
         final String className = packageName + ".activity.HomeWithoutAuthentication";
         final String testFileName = "CapuccinoTest";
-        final String expectedAssertion = "me mama otario";
+        final String expectedAssertion = "assertion test";
         this.setPackageName(packageName);
         this.setClassName(className);
         this.setTestFileName(testFileName);
         this.setExpectedAssertion(expectedAssertion);
-
         super.onCreate(savedInstanceState);
     }
 }

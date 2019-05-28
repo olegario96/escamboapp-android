@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
+import com.getmore.olegario.capuccino.R;
 import com.getmore.olegario.capuccino.model.CapuccinoClickEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoKeyboardEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoEventLogger;
+import com.getmore.olegario.capuccino.model.CapuccinoScrollEvent;
 
 public class CapuccinoBaseActivity extends AppCompatActivity {
 
@@ -24,19 +28,30 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
+//    @Override
+//    public void onBackPressed() {
+//          // TODO
+//    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent me) {
         final int action = me.getActionMasked();
-        final int x = (int) me.getX();
-        final int y = (int) me.getY();
-        CapuccinoClickEvent ce = new CapuccinoClickEvent(x, y);
-
+        final int x1 = (int) me.getX();
+        final int y1 = (int) me.getY();
+        CapuccinoClickEvent ce = new CapuccinoClickEvent(x1, y1);
         if (action == MotionEvent.ACTION_DOWN) {
             this.capuccinoEventLogger.addNewCapuccinoEvent(ce);
         } else if (action == MotionEvent.ACTION_UP) {
-            CapuccinoEvent lastCE = this.capuccinoEventLogger.getLastCapuccinoEvent();
-            if (lastCE instanceof CapuccinoClickEvent && ce.isHoldEvent(lastCE))
-                ((CapuccinoClickEvent) lastCE).setHoldEvent(true);
+            CapuccinoEvent lastClickEvent = this.capuccinoEventLogger.getLastCapuccinoEvent();
+            if (lastClickEvent instanceof CapuccinoClickEvent) {
+                final CapuccinoClickEvent lastCE = (CapuccinoClickEvent) lastClickEvent;
+                final int x0 = lastCE.getX0();
+                final int y0 = lastCE.getY0();
+                if (CapuccinoScrollEvent.isACapuccinoScrollEvent(x0, y0, x1, y1))
+                    this.capuccinoEventLogger.addCapuccinoScrollEvent(lastCE, ce);
+                else if (ce.isHoldEvent(lastCE))
+                    lastCE.setHoldEvent(true);
+            }
         }
         return super.dispatchTouchEvent(me);
     }
@@ -46,27 +61,22 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
         final int action = kEvent.getAction();
         final int keyCode = kEvent.getKeyCode();
         final char character = (char) kEvent.getUnicodeChar();
-
         if (action == KeyEvent.ACTION_UP) {
             final long res = kEvent.getEventTime() - this.timestampLastKeyboardEvent;
-//            Log.i(">>>TEST",  Long.toString(kEvent.getEventTime()));
-//            Log.i(">>>TEST",  Long.toString(res));
             switch (keyCode) {
-                // Backspace pressed
                 case KeyEvent.KEYCODE_DEL:
+                    // FIXME
                     this.capuccinoEventLogger.removeLastCharacter();
                     break;
-
-                // TAB pressed
                 case KeyEvent.KEYCODE_TAB:
+                case KeyEvent.KEYCODE_ENTER:
                     this.capuccinoEventLogger.markLastCapuccinoEventFinal();
                     break;
-
                 default:
-                    // There is a strange behaviour when a special character is typed
-                    // the current method is invoked twice, one for the normal key
-                    // and the other for the shift + key code.
-                    if (kEvent.getEventTime() - this.timestampLastKeyboardEvent != 0) {
+                    // HACK: there is a strange behaviour when a special character is
+                    // typed the current method is invoked twice, one for the normal
+                    // key and the other for the shift + key code.
+                    if (res != 0) {
                         CapuccinoKeyboardEvent ce = new CapuccinoKeyboardEvent(character);
                         this.capuccinoEventLogger.addNewCapuccinoEvent(ce);
                     }

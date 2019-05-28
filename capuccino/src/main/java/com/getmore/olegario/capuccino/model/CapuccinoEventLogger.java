@@ -44,6 +44,16 @@ public final class CapuccinoEventLogger {
         }
     }
 
+    public void addCapuccinoScrollEvent(CapuccinoClickEvent startCE, CapuccinoClickEvent finalCE) {
+        this.capuccinoEvents.remove(this.capuccinoEvents.size()-1);
+        final int x0 = startCE.getX0();
+        final int y0 = startCE.getY0();
+        final int x1 = finalCE.getX0();
+        final int y1 = finalCE.getY0();
+        final CapuccinoScrollEvent capuccinoScrollEvent = new CapuccinoScrollEvent(x0, y0, x1, y1);
+        this.capuccinoEvents.add(capuccinoScrollEvent);
+    }
+
     public void markLastCapuccinoEventFinal() {
         CapuccinoEvent ce = this.getLastCapuccinoEvent();
         if (ce instanceof CapuccinoKeyboardEvent)

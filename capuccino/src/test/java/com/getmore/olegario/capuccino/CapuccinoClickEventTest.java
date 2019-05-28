@@ -10,13 +10,13 @@ public class CapuccinoClickEventTest {
 
     @Test
     public void getX() {
-        final boolean result = ce.getX() == 43;
+        final boolean result = ce.getX0() == 43;
         assert result;
     }
 
     @Test
     public void getY() {
-        final boolean result = ce.getY() == 55;
+        final boolean result = ce.getY0() == 55;
         assert result;
     }
 }

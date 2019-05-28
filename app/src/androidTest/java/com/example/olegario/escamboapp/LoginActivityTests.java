@@ -13,7 +13,14 @@ import android.support.test.espresso.contrib.DrawerMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.View;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -26,8 +33,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import com.example.olegario.escamboapp.activity.HomeWithoutAuthentication;
 
-import net.bytebuddy.agent.ByteBuddyAgent;
-import net.bytebuddy.agent.Installer;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,19 +46,31 @@ public class LoginActivityTests {
         new ActivityTestRule<>(HomeWithoutAuthentication.class);
 
     @Test
-    public void testLoginWithValidUser() {
+    public void testLoginWithValidUser() throws InterruptedException, UiObjectNotFoundException {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        device.click(445, 194);
-//        null.perform(clickXY(445.96875f, 194.96094f));
-//        final String email = "gustavo-olegario@hotmail.com";
+        device.click(71, 150);
+        Thread.sleep(1000);
+        device.click(210, 510);
+        Thread.sleep(1000);
+        device.click(520, 656);
+        new UiObject(new UiSelector().focused(true)).setText("gustavo-olegario@hotmail.com");
+//        final char[] email = .toCharArray();
+//        for (char ch: email) {
+//            KeyEvent kEvent = new KeyEvent(100, Character.toString(ch), 1, 0);
+//            Log.i(">>>>DEBUG", Integer.toString(kEvent.getUnicodeChar()));
+//            device.pressKeyCode(kEvent.getKeyCode());
+//        }
+
+//
+
 //        final String password = "asdfasdf";
 //        final String login = getResourceString(R.string.signIn);
 //        final String welcome = getResourceString(R.string.welcomeUser) + " Gustavo";
-//
+
 //        onView(withId(R.id.drawer_layout_without_authentication))
 //            .check(ViewAssertions.matches(DrawerMatchers.isClosed(Gravity.LEFT)))
 //            .perform(DrawerActions.open());
-//
+
 //
 //        onView(withText(login)).perform(click());
 //        onView(withId(R.id.emailSignInEditText))

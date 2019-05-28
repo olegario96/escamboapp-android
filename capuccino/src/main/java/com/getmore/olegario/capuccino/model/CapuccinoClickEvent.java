@@ -3,23 +3,23 @@ package com.getmore.olegario.capuccino.model;
 import android.util.Log;
 
 public class CapuccinoClickEvent extends CapuccinoEvent {
-    private int x;
-    private int y;
+    private int x0;
+    private int y0;
     private boolean holdEvent;
 
     public CapuccinoClickEvent(int x, int y) {
         super();
-        this.x = x;
-        this.y = y;
+        this.x0 = x;
+        this.y0 = y;
         this.holdEvent = false;
     }
 
-    public int getX() {
-        return x;
+    public int getX0() {
+        return x0;
     }
 
-    public int getY() {
-        return y;
+    public int getY0() {
+        return y0;
     }
 
     public boolean getHoldEvent() {
@@ -41,8 +41,8 @@ public class CapuccinoClickEvent extends CapuccinoEvent {
 
     @Override
     public void print() {
-        final int x = this.getX();
-        final int y = this.getY();
+        final int x = this.getX0();
+        final int y = this.getY0();
         String holdEvent = "";
         if (getHoldEvent())
             holdEvent += " (Is a click hold event)";
