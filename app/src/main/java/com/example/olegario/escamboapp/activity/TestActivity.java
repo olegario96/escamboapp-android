@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.getmore.olegario.capuccino.activity.LauncherAppActivity;
 
 public class TestActivity extends LauncherAppActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final String packageName = "com.example.olegario.escamboapp";

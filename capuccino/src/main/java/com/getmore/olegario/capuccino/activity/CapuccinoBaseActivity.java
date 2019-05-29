@@ -1,5 +1,6 @@
 package com.getmore.olegario.capuccino.activity;
 
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,10 +15,16 @@ import com.getmore.olegario.capuccino.model.CapuccinoClickEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoKeyboardEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoEventLogger;
+import com.getmore.olegario.capuccino.model.CapuccinoOSEvent;
+import com.getmore.olegario.capuccino.model.CapuccinoOSEventEnum;
 import com.getmore.olegario.capuccino.model.CapuccinoScrollEvent;
 
-public class CapuccinoBaseActivity extends AppCompatActivity {
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
+public class CapuccinoBaseActivity extends AppCompatActivity {
+    private KeyboardVisibilityEvent visibilityEvent;
+    private boolean isKeyboardVisible;
     private CapuccinoEventLogger capuccinoEventLogger;
     private long timestampLastKeyboardEvent;
 
@@ -25,13 +32,28 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         this.timestampLastKeyboardEvent = 0;
         capuccinoEventLogger = CapuccinoEventLogger.getInstance();
+        this.configurateKeyBoardEvent();
         super.onCreate(savedInstanceState);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//          // TODO
-//    }
+    private void configurateKeyBoardEvent() {
+        this.visibilityEvent.setEventListener(this, new KeyboardVisibilityEventListener() {
+            @Override
+            public void onVisibilityChanged(boolean isOpen) {
+                isKeyboardVisible = isOpen;
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        CapuccinoOSEvent capuccinoOSEvent;
+        if (this.isKeyboardVisible)
+            capuccinoOSEvent = new CapuccinoOSEvent(CapuccinoOSEventEnum.HIDE_KEYBOARD);
+        else
+            capuccinoOSEvent = new CapuccinoOSEvent(CapuccinoOSEventEnum.BACK_TO_LAST_SCREEN);
+        this.capuccinoEventLogger.addNewCapuccinoEvent(capuccinoOSEvent);
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent me) {
@@ -57,6 +79,16 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent me) {
+        switch (me.getAction()){
+            case MotionEvent.ACTION_UP:
+                return false;
+            default:
+                return super.onTouchEvent(me);
+        }
+    }
+
+    @Override
     public boolean dispatchKeyEvent(@NonNull KeyEvent kEvent) {
         final int action = kEvent.getAction();
         final int keyCode = kEvent.getKeyCode();
@@ -64,14 +96,12 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
         if (action == KeyEvent.ACTION_UP) {
             final long res = kEvent.getEventTime() - this.timestampLastKeyboardEvent;
             switch (keyCode) {
-                case KeyEvent.KEYCODE_DEL:
-                    // FIXME
-                    this.capuccinoEventLogger.removeLastCharacter();
-                    break;
                 case KeyEvent.KEYCODE_TAB:
-                case KeyEvent.KEYCODE_ENTER:
                     this.capuccinoEventLogger.markLastCapuccinoEventFinal();
                     break;
+                case KeyEvent.KEYCODE_ENTER:
+                    this.capuccinoEventLogger.removeLastCharacter();
+                    return false;
                 default:
                     // HACK: there is a strange behaviour when a special character is
                     // typed the current method is invoked twice, one for the normal

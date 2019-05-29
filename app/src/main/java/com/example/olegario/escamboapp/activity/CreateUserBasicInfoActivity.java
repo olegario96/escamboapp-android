@@ -15,12 +15,13 @@ import com.example.olegario.escamboapp.firebase.FirebaseAuthHandler;
 import com.example.olegario.escamboapp.helper.DataValidator;
 import com.example.olegario.escamboapp.helper.Formatter;
 import com.example.olegario.escamboapp.model.User;
+import com.getmore.olegario.capuccino.activity.CapuccinoBaseActivity;
 import com.vicmikhailau.maskededittext.MaskedFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class CreateUserBasicInfoActivity extends AppCompatActivity {
+public class CreateUserBasicInfoActivity extends CapuccinoBaseActivity {
 
     private final int REQUEST_CODE = 1;
 
