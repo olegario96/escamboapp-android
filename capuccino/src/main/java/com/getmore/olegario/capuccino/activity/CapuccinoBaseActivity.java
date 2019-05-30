@@ -1,16 +1,13 @@
 package com.getmore.olegario.capuccino.activity;
 
-import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewTreeObserver;
 
-import com.getmore.olegario.capuccino.R;
 import com.getmore.olegario.capuccino.model.CapuccinoClickEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoKeyboardEvent;
@@ -19,11 +16,7 @@ import com.getmore.olegario.capuccino.model.CapuccinoOSEvent;
 import com.getmore.olegario.capuccino.model.CapuccinoOSEventEnum;
 import com.getmore.olegario.capuccino.model.CapuccinoScrollEvent;
 
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
-
 public class CapuccinoBaseActivity extends AppCompatActivity {
-    private KeyboardVisibilityEvent visibilityEvent;
     private boolean isKeyboardVisible;
     private CapuccinoEventLogger capuccinoEventLogger;
     private long timestampLastKeyboardEvent;
@@ -31,16 +24,22 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.timestampLastKeyboardEvent = 0;
+        this.isKeyboardVisible = false;
         capuccinoEventLogger = CapuccinoEventLogger.getInstance();
-        this.configurateKeyBoardEvent();
+        this.configKeyBoardEvent();
         super.onCreate(savedInstanceState);
     }
 
-    private void configurateKeyBoardEvent() {
-        this.visibilityEvent.setEventListener(this, new KeyboardVisibilityEventListener() {
+    private void configKeyBoardEvent() {
+        final View activityRootView = getWindow().getDecorView().findViewById(android.R.id.content);
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onVisibilityChanged(boolean isOpen) {
-                isKeyboardVisible = isOpen;
+            public void onGlobalLayout() {
+                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+                if (heightDiff > 150)
+                    isKeyboardVisible = true;
+                else
+                    isKeyboardVisible = false;
             }
         });
     }
@@ -53,6 +52,7 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
         else
             capuccinoOSEvent = new CapuccinoOSEvent(CapuccinoOSEventEnum.BACK_TO_LAST_SCREEN);
         this.capuccinoEventLogger.addNewCapuccinoEvent(capuccinoOSEvent);
+        super.onBackPressed();
     }
 
     @Override
@@ -80,12 +80,10 @@ public class CapuccinoBaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent me) {
-        switch (me.getAction()){
-            case MotionEvent.ACTION_UP:
+        if (me.getAction() == MotionEvent.ACTION_UP)
                 return false;
-            default:
-                return super.onTouchEvent(me);
-        }
+        else
+            return super.onTouchEvent(me);
     }
 
     @Override
