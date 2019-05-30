@@ -14,8 +14,10 @@ import com.getmore.olegario.capuccino.model.CapuccinoEventLogger;
 import com.getmore.olegario.capuccino.model.CapuccinoTestConfiguration;
 import com.getmore.olegario.capuccino.model.CapuccinoTestWriter;
 
+import java.io.IOException;
+
 public class LauncherAppActivity extends AppCompatActivity {
-    private final CapuccinoTestConfiguration capuccinoTestConfiguration = new CapuccinoTestConfiguration();
+    protected final CapuccinoTestConfiguration capuccinoTestConfiguration = new CapuccinoTestConfiguration();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +27,19 @@ public class LauncherAppActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        final String packageName = this.capuccinoTestConfiguration.getPackageName();
-        final String className = this.capuccinoTestConfiguration.getClassName();
+        final String packageName = this.capuccinoTestConfiguration.getPackagePath();
+        final String activityPackagePath = this.capuccinoTestConfiguration.getActivityPackagePath();
+        final String className = this.capuccinoTestConfiguration.getActivityClassName();
 
-        if (this.capuccinoTestConfiguration.getPackageName() == null ||
-            this.capuccinoTestConfiguration.getClassName() == null) {
+        if (this.capuccinoTestConfiguration.getPackagePath() == null ||
+            this.capuccinoTestConfiguration.getActivityClassName() == null) {
 
-            final String errMsg = getString(R.string.activity_package_exception_message);
+            final String errMsg = getString(R.string.root_package_exception_message);
+            throw new ActivityPackageException(errMsg);
+        }
+
+        if (this.capuccinoTestConfiguration.getActivityPackagePath() == null) {
+            final String errMsg = getString(R.string.package_for_activity_exception_message);
             throw new ActivityPackageException(errMsg);
         }
 
@@ -45,16 +53,21 @@ public class LauncherAppActivity extends AppCompatActivity {
             throw new ExpectedAssertionException(errMsg);
         }
 
-        intent.setComponent(new ComponentName(packageName, className));
+        final String componentPath = packageName + "." + activityPackagePath + "." + className;
+        intent.setComponent(new ComponentName(packageName, componentPath));
         startActivity(intent);
     }
 
-    public void setPackageName(String packageName) {
-        this.capuccinoTestConfiguration.setPackageName(packageName);
+    public void setPackagePath(String packagePath) {
+        this.capuccinoTestConfiguration.setPackagePath(packagePath);
+    }
+
+    public void setActiviyPackagePath(String activityPackagePath) {
+        this.capuccinoTestConfiguration.setActivityPackagePath(activityPackagePath);
     }
 
     public void setClassName(String className) {
-        this.capuccinoTestConfiguration.setClassName(className);
+        this.capuccinoTestConfiguration.setActivityClassName(className);
     }
 
     public void setTestFileName(String testFileName) {
@@ -68,7 +81,14 @@ public class LauncherAppActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         CapuccinoEventLogger capuccinoEventLogger = CapuccinoEventLogger.getInstance();
-        CapuccinoTestWriter.writeTest(this.capuccinoTestConfiguration, capuccinoEventLogger);
+        CapuccinoTestWriter capuccinoTestWriter = CapuccinoTestWriter.getInstance();
+        try {
+            capuccinoTestWriter.writeTest(this.capuccinoTestConfiguration, capuccinoEventLogger, getApplicationContext());
+        } catch (IOException e) {
+            Log.e(">>>>CAPUCCINO ERROR", getString(R.string.error_while_writing_test_file));
+            Log.e(">>>>CAPUCCINO ERROR", getString(R.string.printing_stack_trace));
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 }

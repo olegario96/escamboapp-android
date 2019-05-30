@@ -1,34 +1,45 @@
 package com.getmore.olegario.capuccino.model;
 
 public class CapuccinoTestConfiguration {
-    private String packageName;
-    private String className;
+    private String packagePath;
+    private String activityPackagePath;
+    private String activityClassName;
     private String testFileName;
     private String expectedAssertion;
 
-    public CapuccinoTestConfiguration(String packageName, String className, String testFileName, String expectedAssertion) {
-        this.packageName = packageName;
-        this.className = className;
+    public CapuccinoTestConfiguration(String packagePath, String activityClassName,
+                                      String activityPackagePath, String testFileName,
+                                      String expectedAssertion) {
+
+        this.packagePath = packagePath;
+        this.activityPackagePath = activityPackagePath;
+        this.activityClassName = activityClassName;
         this.testFileName = testFileName;
         this.expectedAssertion = expectedAssertion;
     }
 
     public CapuccinoTestConfiguration() {}
 
-    public String getPackageName() {
-        return packageName;
+    public String getPackagePath() {
+        return packagePath;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
+    public void setPackagePath(String packagePath) {
+        this.packagePath = packagePath;
     }
 
-    public String getClassName() {
-        return className;
+    public String getActivityClassName() {
+        return activityClassName;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setActivityClassName(String activityClassName) {
+        this.activityClassName = activityClassName;
+    }
+
+    public String getActivityPackagePath() { return activityPackagePath; }
+
+    public void setActivityPackagePath(String activityPackagePath) {
+        this.activityPackagePath = activityPackagePath;
     }
 
     public String getTestFileName() {

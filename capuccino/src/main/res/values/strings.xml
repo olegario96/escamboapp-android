@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">capuccino</string>
-    <string name="activity_package_exception_message">Package or Classname not set!</string>
+    <string name="root_package_exception_message">Root package or Classname not set!</string>
+    <string name="package_for_activity_exception_message">Package for activity not set!</string>
     <string name="expected_assertion_exception_message">Expected assertion not set!</string>
     <string name="test_file_name_exception_message">Test file name not set!</string>
     <string name="text_event_before_click_event_exception_message">Impossible to perform a keyboard event before a click event</string>
+    <string name="error_while_writing_test_file">It was not possible to write test file!</string>
+    <string name="printing_stack_trace">Printing stacktrace...</string>
 </resources>

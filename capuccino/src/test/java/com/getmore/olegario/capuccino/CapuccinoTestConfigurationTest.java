@@ -14,13 +14,13 @@ public class CapuccinoTestConfigurationTest {
 
     @Test
     public void getPackageName() {
-        final boolean result = testConfiguration.getPackageName().equals("com.example.olegario.escamboapp");
+        final boolean result = testConfiguration.getPackagePath().equals("com.example.olegario.escamboapp");
         assert result;
     }
 
     @Test
     public void getClassName() {
-        final boolean result = testConfiguration.getClassName().equals(".activity.HomeWithoutAuthentication");
+        final boolean result = testConfiguration.getActivityClassName().equals(".activity.HomeWithoutAuthentication");
         assert result;
     }
 
@@ -38,15 +38,15 @@ public class CapuccinoTestConfigurationTest {
 
     @Test
     public void setPackageName() {
-        testConfiguration.setPackageName("com.getmore.olegario.escamboapp");
-        final boolean result = testConfiguration.getPackageName().equals("com.getmore.olegario.escamboapp");
+        testConfiguration.setPackagePath("com.getmore.olegario.escamboapp");
+        final boolean result = testConfiguration.getPackagePath().equals("com.getmore.olegario.escamboapp");
         assert result;
     }
 
     @Test
     public void setClassName() {
-        testConfiguration.setClassName(".activity.MainActivity");
-        final boolean result = testConfiguration.getClassName().equals(".activity.MainActivity");
+        testConfiguration.setActivityClassName(".activity.MainActivity");
+        final boolean result = testConfiguration.getActivityClassName().equals(".activity.MainActivity");
         assert result;
     }
 
