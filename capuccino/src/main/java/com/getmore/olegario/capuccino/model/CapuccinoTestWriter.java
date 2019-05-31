@@ -7,6 +7,11 @@ import java.io.OutputStreamWriter;
 
 public final class CapuccinoTestWriter {
     private String[] defaultImports;
+    private final Stringify stringify = Stringify.getInstance();
+    private final String TEST = "@Test";
+    private final String PUBLIC = "public";
+    private final String CLASS = "class";
+    private final String ACTIVITY_TEST_RULE = "ActivityTestRule";
     private static final CapuccinoTestWriter INSTANCE = new CapuccinoTestWriter();
 
     private CapuccinoTestWriter() {
@@ -28,7 +33,7 @@ public final class CapuccinoTestWriter {
     public void writeTest(CapuccinoTestConfiguration testConfiguration,
                           CapuccinoEventLogger eventLogger, Context context) throws IOException {
 
-        final String fileName = testConfiguration.getTestFileName();
+        final String fileName = this.stringify.concatenateWDot(testConfiguration.getTestFileName(), "java");
         final String activityPackagePath = testConfiguration.getActivityPackagePath();
         final String activityClassName = testConfiguration.getActivityClassName();
         OutputStreamWriter outputStream = new OutputStreamWriter(   context.openFileOutput(fileName,
@@ -38,33 +43,92 @@ public final class CapuccinoTestWriter {
                                             activityPackagePath,
                                             activityClassName,
                                             outputStream);
+
+        this.writeTestClass(testConfiguration, eventLogger, outputStream);
+        this.writeRule(outputStream, testConfiguration.getTestFileName());
+        this.writeTestSwitch(outputStream, eventLogger);
+        outputStream.write(this.stringify.breaklinefy("}"));
+        outputStream.close();
     }
 
-    public void writePackageAndDefaultImports(String packageName,
+    private void writePackageAndDefaultImports(String packageName,
                                               String activityPackagePath,
                                               String activityClassName,
                                               OutputStreamWriter outputStream) throws IOException {
 
-        outputStream.write(packagify(packageName));
-        for (String stringImport: this.defaultImports) outputStream.write(stringImport);
-        outputStream.write(importify(packageName, activityPackagePath, activityClassName));
+        outputStream.write(this.stringify.packagify(packageName));
+        for (String stringImport: this.defaultImports) outputStream.write(this.stringify.breaklinefy(stringImport));
+        outputStream.write(this.stringify.importify(packageName, activityPackagePath, activityClassName));
     }
 
-    private String importify(String packagePath, String activityPackagePath,
-                             String activityClassName) {
+    private void writeTestClass(CapuccinoTestConfiguration testConfiguration,
+                                CapuccinoEventLogger capuccinoEventLogger,
+                                OutputStreamWriter outputStream) throws IOException {
 
-        final String importPath = packagePath + "." + activityPackagePath + "." + activityClassName;
-        return semicolonify("import " + semicolonify(importPath));
+        final String RUN_WITH = "@RunWith(AndroidJUnit4.class)";
+        final String className = testConfiguration.getTestFileName();
+        outputStream.write(this.stringify.breaklinefy(RUN_WITH));
+        this.writeClassDeclaration(className, outputStream);
     }
 
-    private String packagify(String packagePath) {
-        return semicolonify("package " + semicolonify(packagePath));
+    private void writeClassDeclaration(String className,
+                                       OutputStreamWriter outputStream) throws IOException {
+
+        final String classDeclaration = this.stringify.concatenateWWhiteSpace(
+                                            this.stringify.concatenateWWhiteSpace(
+                                                this.stringify.concatenateWWhiteSpace(
+                                                    this.PUBLIC, this.CLASS
+                                                ), className
+                                            ), "{"
+                                        );
+
+        outputStream.write(this.stringify.breaklinefy(classDeclaration));
     }
 
-    private String semicolonify(String command) {
-        return  command.substring(command.length() - 1).equals(";") ?
-                command :
-                command + ";";
+    private void writeRule(OutputStreamWriter outputStream, String className) throws IOException {
+        final String RULE = "@Rule";
+        final String activityRule = this.stringify.concatenateWWhiteSpace(this.PUBLIC, this.ACTIVITY_TEST_RULE);
+        final String templateForClass = this.stringify.formatTemplate(className);
+        final String activityRuleTyped = this.stringify.concatenateWWhiteSpace(activityRule, templateForClass);
+        final String typedActivityVariableRule = this.stringify.concatenateWWhiteSpace(activityRuleTyped, "mActivityRule");
+        final String variableRuleAssigned = this.stringify.concatenateWWhiteSpace(typedActivityVariableRule, "=");
+
+        final String classType = this.stringify.concatenateWDot(className, this.CLASS);
+        final String classParameter = this.stringify.formatParentheses(classType);
+        final String newCommand = this.stringify.concatenateWWhiteSpace("new", this.ACTIVITY_TEST_RULE);
+        final String newCommandType =   newCommand +
+                                        this.stringify.formatTemplate("") +
+                                        classParameter;
+
+        outputStream.write(this.stringify.breaklinefy(RULE));
+        outputStream.write(this.stringify.breaklinefy(variableRuleAssigned));
+        outputStream.write(this.stringify.semicolonify(newCommandType));
+    }
+
+    private void writeTestSwitch(OutputStreamWriter outputStream,
+                                 CapuccinoEventLogger eventLogger) throws IOException {
+
+        outputStream.write(this.stringify.breaklinefy(this.TEST));
+        this.writeMethodDeclaration(outputStream);
+        outputStream.write(this.stringify.breaklinefy("}"));
+    }
+
+    private void writeMethodDeclaration(OutputStreamWriter outputStream) throws IOException {
+        final String methodTyped = this.stringify.concatenateWWhiteSpace(
+                                        this.stringify.concatenateWWhiteSpace(
+                                            this.PUBLIC, "void"
+                                        ), "capuccinoAutomatedTest"
+                                    );
+
+        final String methodSigned = methodTyped + this.stringify.formatParentheses("");
+        final String methodWithExceptions = this.stringify.concatenateWWhiteSpace(
+                                                this.stringify.concatenateWWhiteSpace(
+                                                    methodSigned,
+                                                    "InterruptedException, UiObjectNotFoundException"
+                                                ), "{"
+                                            );
+
+        outputStream.write(this.stringify.breaklinefy(methodWithExceptions));
     }
 
     public static CapuccinoTestWriter getInstance() {
