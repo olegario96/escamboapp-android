@@ -12,6 +12,7 @@ public final class CapuccinoTestWriter {
     private final String PUBLIC = "public";
     private final String CLASS = "class";
     private final String ACTIVITY_TEST_RULE = "ActivityTestRule";
+    private final CapuccinoEventTranslator translator = CapuccinoEventTranslator.getInstance();
     private static final CapuccinoTestWriter INSTANCE = new CapuccinoTestWriter();
 
     private CapuccinoTestWriter() {
@@ -44,8 +45,8 @@ public final class CapuccinoTestWriter {
                                             activityClassName,
                                             outputStream);
 
-        this.writeTestClass(testConfiguration, eventLogger, outputStream);
-        this.writeRule(outputStream, testConfiguration.getTestFileName());
+        this.writeTestClass(testConfiguration, outputStream);
+        this.writeRule(outputStream, testConfiguration.getActivityClassName());
         this.writeTestSwitch(outputStream, eventLogger);
         outputStream.write(this.stringify.breaklinefy("}"));
         outputStream.close();
@@ -62,7 +63,6 @@ public final class CapuccinoTestWriter {
     }
 
     private void writeTestClass(CapuccinoTestConfiguration testConfiguration,
-                                CapuccinoEventLogger capuccinoEventLogger,
                                 OutputStreamWriter outputStream) throws IOException {
 
         final String RUN_WITH = "@RunWith(AndroidJUnit4.class)";
@@ -110,6 +110,10 @@ public final class CapuccinoTestWriter {
 
         outputStream.write(this.stringify.breaklinefy(this.TEST));
         this.writeMethodDeclaration(outputStream);
+        final String instanciateUiDevice = "UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());";
+        outputStream.write(this.stringify.breaklinefy(instanciateUiDevice));
+        String[] commands = this.translator.translateCapuccinoLogger(eventLogger);
+        this.writeCommandsWithDelay(outputStream, commands);
         outputStream.write(this.stringify.breaklinefy("}"));
     }
 
@@ -124,11 +128,20 @@ public final class CapuccinoTestWriter {
         final String methodWithExceptions = this.stringify.concatenateWWhiteSpace(
                                                 this.stringify.concatenateWWhiteSpace(
                                                     methodSigned,
-                                                    "InterruptedException, UiObjectNotFoundException"
+                                                    "throws InterruptedException, UiObjectNotFoundException"
                                                 ), "{"
                                             );
 
         outputStream.write(this.stringify.breaklinefy(methodWithExceptions));
+    }
+
+    private void writeCommandsWithDelay(OutputStreamWriter outputStream,
+                                       String[] commands) throws IOException {
+
+        for (String command: commands) {
+            outputStream.write(this.stringify.breaklinefy(command));
+            outputStream.write(this.stringify.breaklinefy("Thread.sleep(1000);"));
+        }
     }
 
     public static CapuccinoTestWriter getInstance() {
