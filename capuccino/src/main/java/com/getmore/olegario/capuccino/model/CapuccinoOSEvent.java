@@ -9,6 +9,10 @@ public class CapuccinoOSEvent extends CapuccinoEvent {
         this.osEvent = osEvent;
     }
 
+    public CapuccinoOSEventEnum getOSEvent() {
+        return this.osEvent;
+    }
+
     @Override
     public void print() {
         Log.i(">>>CAPUCCINO OS EVENT", this.osEvent.toString());

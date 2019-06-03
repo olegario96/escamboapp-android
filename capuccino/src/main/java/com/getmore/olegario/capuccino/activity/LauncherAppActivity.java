@@ -79,7 +79,7 @@ public class LauncherAppActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         CapuccinoEventLogger capuccinoEventLogger = CapuccinoEventLogger.getInstance();
         CapuccinoTestWriter capuccinoTestWriter = CapuccinoTestWriter.getInstance();
         try {

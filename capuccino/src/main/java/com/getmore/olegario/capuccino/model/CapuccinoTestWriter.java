@@ -18,6 +18,9 @@ public final class CapuccinoTestWriter {
     private CapuccinoTestWriter() {
         this.defaultImports = new String[] {
             "import android.content.Context;",
+            "import android.support.test.espresso.Espresso;",
+            "import android.support.test.espresso.assertion.ViewAssertions;",
+            "import android.support.test.espresso.matcher.ViewMatchers;",
             "import android.support.test.InstrumentationRegistry;",
             "import android.support.test.rule.ActivityTestRule;",
             "import android.support.test.runner.AndroidJUnit4;",
@@ -33,7 +36,7 @@ public final class CapuccinoTestWriter {
 
     public void writeTest(CapuccinoTestConfiguration testConfiguration,
                           CapuccinoEventLogger eventLogger, Context context) throws IOException {
-
+        eventLogger.print();
         final String fileName = this.stringify.concatenateWDot(testConfiguration.getTestFileName(), "java");
         final String activityPackagePath = testConfiguration.getActivityPackagePath();
         final String activityClassName = testConfiguration.getActivityClassName();
@@ -47,7 +50,7 @@ public final class CapuccinoTestWriter {
 
         this.writeTestClass(testConfiguration, outputStream);
         this.writeRule(outputStream, testConfiguration.getActivityClassName());
-        this.writeTestSwitch(outputStream, eventLogger);
+        this.writeTestSwitch(outputStream, testConfiguration.getExpectedAssertion(),eventLogger);
         outputStream.write(this.stringify.breaklinefy("}"));
         outputStream.close();
     }
@@ -106,6 +109,7 @@ public final class CapuccinoTestWriter {
     }
 
     private void writeTestSwitch(OutputStreamWriter outputStream,
+                                 String expectedAssertion,
                                  CapuccinoEventLogger eventLogger) throws IOException {
 
         outputStream.write(this.stringify.breaklinefy(this.TEST));
@@ -114,6 +118,7 @@ public final class CapuccinoTestWriter {
         outputStream.write(this.stringify.breaklinefy(instanciateUiDevice));
         String[] commands = this.translator.translateCapuccinoLogger(eventLogger);
         this.writeCommandsWithDelay(outputStream, commands);
+        outputStream.write(this.stringify.breaklinefy(expectedAssertion));
         outputStream.write(this.stringify.breaklinefy("}"));
     }
 

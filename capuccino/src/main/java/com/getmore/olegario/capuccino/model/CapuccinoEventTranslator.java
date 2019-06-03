@@ -21,6 +21,9 @@ public final class CapuccinoEventTranslator {
             } else if (capuccinoEvent instanceof CapuccinoKeyboardEvent) {
                 eventsTranslated[i] =
                         this.translateCapuccinoKeyboardEvent((CapuccinoKeyboardEvent) capuccinoEvent);
+            } else if (capuccinoEvent instanceof  CapuccinoOSEvent) {
+                eventsTranslated[i] =
+                        this.translateCapuccinoOSEvent((CapuccinoOSEvent) capuccinoEvent);
             }
             ++i;
         }
@@ -44,9 +47,20 @@ public final class CapuccinoEventTranslator {
     }
 
     private String translateCapuccinoKeyboardEvent(CapuccinoKeyboardEvent ke) {
-        final String text = ke.getText();
+        final String text = "\"" + ke.getText() + "\"";
         final String uiObject = "new UiObject(new UiSelector().focused(true)).setText(";
         return uiObject + text + ");";
+    }
+
+    private String translateCapuccinoOSEvent(CapuccinoOSEvent oe) {
+        final CapuccinoOSEventEnum EVENT = oe.getOSEvent();
+        switch (EVENT) {
+            case HIDE_KEYBOARD:
+                return "device.pressBack();";
+            default:
+                return "// TODO";
+
+        }
     }
 
     public static CapuccinoEventTranslator getInstance() {

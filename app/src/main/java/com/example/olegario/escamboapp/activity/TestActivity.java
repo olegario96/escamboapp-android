@@ -11,7 +11,7 @@ public class TestActivity extends LauncherAppActivity {
         final String activityPackagePath = "activity";
         final String className = "HomeWithoutAuthentication";
         final String testFileName = "CapuccinoTest";
-        final String expectedAssertion = "assertion test";
+        final String expectedAssertion = "Espresso.onView(ViewMatchers.withId(R.id.passwordLoginEditText)).check(ViewAssertions.matches(ViewMatchers.hasErrorText(\"E-mail inválido\")));";
         this.setPackagePath(packagePath);
         this.setActiviyPackagePath(activityPackagePath);
         this.setClassName(className);
